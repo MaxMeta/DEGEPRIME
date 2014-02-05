@@ -8,7 +8,7 @@ Content
 1. Overview
 ===========DegePrime
 
-DegePrime is a program that for each position in a multiple sequence alignment finds a degenerate oligomer, of defined length and degeneracy, of as high coverage as possible (matching as many of the sequences as possible in that position). It hence attempts to solve the "maximum coverage degenerate primer design problem" (MC-DPD), and uses a novel heuristic for this. The main script is DegePrime.pl that performs the actual oligomer selection procedure. The script TrimAlignment.pl is used to prepare the alignment file and has to be run prior to DegePrime.pl. As an option, DegePrime.pl can output primer coverage among taxonomic groups of sequences, if a file with taxonomic information for the sequences is provided. Such a file can be generated from an RDP (http://rdp.cme.msu.edu/) file in genbank format by the script MakeRdpTaxonomy.pl.
+DegePrime is a program that for each position in a multiple sequence alignment finds a degenerate oligomer, of defined length and degeneracy, of as high coverage as possible (matching as many of the sequences as possible in that position). It hence attempts to solve the "maximum coverage degenerate primer design problem" (MC-DPD), and uses a novel heuristic for this. The main script is DegePrime.pl that performs the actual oligomer selection procedure. The script TrimAlignment.pl is used to prepare the alignment file and has to be run prior to DegePrime.pl. As an option, DegePrime.pl can output primer coverage among taxonomic groups of sequences, if a file with taxonomic information for the sequences is provided. Such a file can be generated from an RDP (http://rdp.cme.msu.edu/) file in genbank format by the script MakeRdpTaxonomy.pl or from a Silva (http://www.arb-silva.de/) file in fasta format with taxonomies in the sequence headers by the script MakeSilvaTaxonomy.pl.
 
 2. Usage
 ===============
@@ -71,5 +71,7 @@ For more help and additional optional parameters for the scripts, use -h:
  perl TrimAlignment.pl -h
 
  perl MakeRdpTaxonomy.pl -h
+
+ perl MakeSilvaTaxonomy.pl -h
 
 ===============
