@@ -81,9 +81,6 @@ if ($taxonomy_level) {
 	}
 }
 
-#$hyden_outfile = "hyden_out.txt";
-#$hyden_infile = "hyden_in.fasta";
-
 #$taxonomy_file = "rdp_10_7_taxonomy.txt";
 #$aligned_short_file = "arch_align_rdp_10_7_short.fasta";
 #$aligned_short_file = "rdp_download_138807seqs_v9_1200nt_good_aligned_short_r2000.fna";
@@ -157,7 +154,7 @@ sub calc_coverage {
 		if ($zero_insertions >= $min_depth) {
 			$unique = @sorted_mer;
 			print OUT "$pos\t$total_spanning\t$unique\t$entropy";
-			&random_summation($pos);
+			&weighted_randomised_combination($pos);
 			#&hyden($pos);
 			$time1 = time;
 			$time = ($time1 - $time0);
@@ -252,7 +249,7 @@ sub get_mer_ranking {
 	return($total_spanning, $zero_gaps, $entropy);
 }
 
-sub random_summation {
+sub weighted_randomised_combination {
 	local($pos);
 	local($deg);
 	local($matching);
@@ -541,15 +538,14 @@ sub get_taxonomy {
 	while (<INFILE>) {
 		chomp;
 		@fields = split(/\t/);
-	   	$fields[1] =~ s/\s+//g;
 		@subfields = split(/;/, $fields[1]);
-		if (@subfields < $taxonomy_level) { # Note! 
-			$id_taxon{$fields[0]} = $subfields[@subfields - 1];
-			$taxon{$subfields[@subfields - 1]} = 1;
+		if (@subfields < $taxonomy_level) {
+			$taxon = $fields[1];
 		} else {
-			$id_taxon{$fields[0]} = $subfields[$taxonomy_level - 1];
-			$taxon{$subfields[$taxonomy_level - 1]} = 1;
+			$taxon = join(';', @subfields[0..($taxonomy_level-1)]);
 		}
+		$id_taxon{$fields[0]} = $taxon;
+		$taxon{$taxon} = 1;
 	}
 	close (INFILE);
 	@taxa = (keys %taxon);
@@ -561,6 +557,8 @@ sub get_taxonomy {
 # The remainder is not used by Degeprime
 
 sub hyden {
+	$hyden_outfile = "hyden_out.txt";
+	$hyden_infile = "hyden_in.fasta";
 	local($startpos) = $_[0];
 	local($deg) = undef;
 	local($match) = 0;
