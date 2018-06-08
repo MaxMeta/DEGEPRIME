@@ -18,13 +18,13 @@ Input files
 Running
 
 "Spare me the details...":
-
+```
  perl TrimAlignment.pl -i align_file -min cutoff -o trimmed_align_file
-
+```
  (-min 0.9 usually works well)
-
+```
  perl DegePrime.pl -i trimmed_align_file -d degeneracy -l primer_length -o output_file
-
+```
  (e.g. -d 12 -l 18)
 
 
@@ -32,21 +32,21 @@ Running
 
 First, the alignment file has to be prepared by the script TrimAlignment.pl. There are two reasons for this. First, your alignment may include many positions with gaps in many of the sequences, especially if the alignment is based on a large number of sequences. Since DegePrime.pl will, in each window, only use those sequences that do not have gaps, this will be troublesome. With TrimAlignment.pl you can remove those columns in your alignment that are not occupied (have a nucleotide) in at least a defined proportion of sequences, set by the optional parameter -min :
 
-'''
+```
  perl TrimAlignment.pl -i align_file -min cutoff -o trimmed_align_file
-'''
+```
 
 where (0 =< cutoff =< 1). Using -min 1 will hence only output columns that have a nucleotide in every sequence. If you don't specify -min the value 0 is used, so:
-
+```
  perl TrimAlignment.pl -i align_file -o trimmed_align_file
-
+```
 will output the same alignment as the original. There is however one important difference - any lower case letter in the original alignment will be converted to upper case. This is important because DegePrime.pl interprets lower case and upper case letters differently! Lower case letters will be regarded as preceding a gap in the original alignment that has been removed in the trimmed alignment, while upper case letters will not. DegePrime.pl uses this information when it designs degenerate primers and calculates coverages (it will only use sequences without gaps in the window when searching for optimal degenerate primers, and when calculating the primer coverage it will consider sequences with gaps in the window as not matching the primer). Therefor, if your original alignment has lower case letters, TrimAlignment will convert all these to upper case, and, if it removes any gaps, nucleotides preceding these will be changed to lower case. You should thus run TrimAlignment.pl even though you don't want to remove any columns (unless you are sure your alignment only includes upper case letters).
 
 
 Now we are ready for finding degenerate primers (using the output file from TrimAlignment.pl):
-
+```
  perl DegePrime.pl -i trimmed_align_file -d degeneracy -l primer_length -o output_file
-
+```
 -d should be a possible degeneracy, i.e. 1, 2, 3, 4, 6, 8, 9, 12, and so forth (or more generally a number > 0 that can be expressed as 2^i * 3^j, where i and j are integers or 0).
 
 
@@ -64,7 +64,7 @@ PrimerSeq:		Sequence of the selected degenerate primer.
 
 
 For more help and additional optional parameters for the scripts, use -h: 
-
+```
  perl DegePrime.pl -h
 
  perl TrimAlignment.pl -h
@@ -72,3 +72,4 @@ For more help and additional optional parameters for the scripts, use -h:
  perl MakeRdpTaxonomy.pl -h
 
  perl MakeSilvaTaxonomy.pl -h
+ ```
